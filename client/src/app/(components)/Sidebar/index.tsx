@@ -20,9 +20,15 @@ const Sidebar = () => {
 
   return (
     <div className={sidebarClassNames}>
-      <div className="flex items-center justify-between gap-3 pt-8 md:justify-normal">
+      <div
+        className={`flex items-center justify-between gap-3 pt-8 md:justify-normal ${isSidebarCollapsed ? "px-5" : "px-8"}`}
+      >
         <div className="">logo</div>
-        <h1 className="text-2xl font-extrabold">Ztocks</h1>
+        <h1
+          className={`text-2xl font-extrabold ${isSidebarCollapsed ? "hidden" : "block"}`}
+        >
+          Ztocks
+        </h1>
 
         <button
           className="rounded-full bg-gray-100 px-3 py-3 hover:bg-blue-100 md:hidden"
