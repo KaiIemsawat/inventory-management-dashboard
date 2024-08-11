@@ -1,19 +1,26 @@
 "use client";
 
 import { useAppDiapatch, useAppSelector } from "@/app/redux";
-import { setIsSidebarCollapsed } from "@/state";
-import { Bell, Menu, Settings, Sun } from "lucide-react";
+import { setIsDarkMode, setIsSidebarCollapsed } from "@/state";
+import { Bell, Menu, Moon, Settings, Sun } from "lucide-react";
 import Link from "next/link";
 
 const Navbar = () => {
   const dispatch = useAppDiapatch();
+
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed,
   );
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   const toggleSidebar = () => {
     dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
   };
+
+  const toggleDarkMode = () => {
+    dispatch(setIsDarkMode(!isDarkMode));
+  };
+
   return (
     <div className="mb-7 flex w-full items-center justify-between">
       {/* LEFT SIDE */}
@@ -29,7 +36,7 @@ const Navbar = () => {
           <input
             type="search"
             placeholder="Start type to search groups & products"
-            className="w-50 rounded-lg border-2 border-gray-300 bg-white py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none md:w-80"
+            className="w-50 rounded-lg border-2 border-gray-300 bg-white py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none md:w-60 lg:w-80"
           />
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <Bell className="text-gray-500" size={20} />
@@ -41,8 +48,12 @@ const Navbar = () => {
       <div className="flex items-center justify-between gap-5">
         <div className="hidden items-center justify-between gap-5 md:flex">
           <div className="">
-            <button onClick={() => {}}>
-              <Sun className="cursor-pointer text-gray-500" size={24} />
+            <button onClick={toggleDarkMode}>
+              {isDarkMode ? (
+                <Sun className="cursor-pointer text-gray-500" size={24} />
+              ) : (
+                <Moon className="cursor-pointer text-gray-500" size={24} />
+              )}
             </button>
           </div>
           <div className="relative">
