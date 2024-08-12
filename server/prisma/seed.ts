@@ -25,6 +25,7 @@ async function deleteAllData(orderedFileNames: string[]) {
 async function main() {
     const dataDirectory = path.join(__dirname, "seedData");
 
+    // Order of json files matter. From create first to last
     const orderedFileNames = [
         "products.json",
         "expenseSummary.json",
