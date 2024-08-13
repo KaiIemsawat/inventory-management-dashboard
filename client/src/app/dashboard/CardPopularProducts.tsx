@@ -4,7 +4,6 @@ import Rating from "../(components)/Rating";
 
 const CardPopularProducts = () => {
   const { data: dashboardMetrics, isLoading } = useGetDashboardMetricsQuery();
-  console.log(dashboardMetrics);
 
   return (
     <div className="row-span-3 rounded-2xl bg-white pb-16 shadow-md xl:row-span-6">
