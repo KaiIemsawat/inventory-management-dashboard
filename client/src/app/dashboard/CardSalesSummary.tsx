@@ -25,6 +25,18 @@ const CardSalesSummary = () => {
       return acc + curr.changePercentage! / array.length;
     }, 0) || 0;
 
+  const highestValueData = salesData.reduce((acc, curr) => {
+    return acc.totalValue > curr.totalValue ? acc : curr;
+  }, salesData[0] || {});
+
+  const highestValueDate = highestValueData.date
+    ? new Date(highestValueData.date).toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "numeric",
+        year: "2-digit",
+      })
+    : "N/A";
+
   if (isError) {
     return <div className="m-5">Failed to fetch data</div>;
   }
@@ -114,6 +126,13 @@ const CardSalesSummary = () => {
           {/* FOOTER */}
           <div>
             <hr />
+            <div className="mb-4 mt-6 flex items-center justify-between px-7 text-sm">
+              <p>{salesData.length || 0} days</p>
+              <p className="text-sm">
+                Highest Sales Date:{" "}
+                <span className="font-bold">{highestValueDate}</span>
+              </p>
+            </div>
           </div>
         </>
       )}
