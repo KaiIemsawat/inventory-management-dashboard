@@ -1,19 +1,27 @@
 import { useGetDashboardMetricsQuery } from "@/state/api";
 import { TrendingUp } from "lucide-react";
 import { useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-type Props = {};
 const CardSalesSummary = () => {
   const { data, isLoading, isError } = useGetDashboardMetricsQuery();
-  const saleData = data?.salesSummary || [];
+  const salesData = data?.salesSummary || [];
 
   const [timeframe, setTimeframe] = useState("weekly");
 
   const totalValueSum =
-    saleData.reduce((acc, curr) => acc + curr.totalValue, 0) || 0;
+    salesData.reduce((acc, curr) => acc + curr.totalValue, 0) || 0;
 
   const averageChangePercentage =
-    saleData.reduce((acc, curr, _, array) => {
+    salesData.reduce((acc, curr, _, array) => {
       return acc + curr.changePercentage! / array.length;
     }, 0) || 0;
 
@@ -32,15 +40,17 @@ const CardSalesSummary = () => {
             <h2 className="mb-2 px-7 pt-5 text-lg font-semibold">
               Sales Summary
             </h2>
+            <hr />
           </div>
 
           {/* BODY */}
           <div>
             {/* BODY HEADER */}
-            <div className="mb-6 flex items-center justify-between px-7">
+            <div className="mb-6 mt-5 flex items-center justify-between px-7">
               <div className="text-lg font-medium">
                 <p className="text-xs text-gray-400">Value</p>
                 <span className="text-2xl font-extrabold">
+                  $
                   {(totalValueSum / 1000000).toLocaleString("en", {
                     maximumFractionDigits: 2,
                   })}
@@ -48,7 +58,7 @@ const CardSalesSummary = () => {
                 </span>
                 <span className="ml-2 text-sm text-green-500">
                   <TrendingUp className="mr-1 inline h-4 w-4" />
-                  {averageChangePercentage.toFixed(2)}
+                  {averageChangePercentage.toFixed(2)}%
                 </span>
               </div>
               <select
@@ -63,6 +73,47 @@ const CardSalesSummary = () => {
                 <option value="monthly">Monthly</option>
               </select>
             </div>
+
+            {/* CHART */}
+            <ResponsiveContainer width="100%" height={350} className="px-7">
+              <BarChart
+                data={salesData}
+                margin={{ top: 0, right: 0, left: -25, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="" vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tickFormatter={(value) => {
+                    const date = new Date(value);
+                    return `${date.getMonth() + 1}/${date.getDate()}`;
+                  }}
+                />
+                <YAxis
+                  tickFormatter={(value) => {
+                    return `$${(value / 1000000).toFixed(0)}m`;
+                  }}
+                  tick={{ fontSize: 12, dx: -1 }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip
+                  formatter={(value: number) => [
+                    `$${value.toLocaleString("en")}`,
+                  ]}
+                />
+                <Bar
+                  dataKey="totalValue"
+                  fill="#3182ce"
+                  barSize={10}
+                  radius={[10, 10, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* FOOTER */}
+          <div>
+            <hr />
           </div>
         </>
       )}
