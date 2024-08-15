@@ -2,6 +2,7 @@ import {
   ExpenseByCategorySummary,
   useGetDashboardMetricsQuery,
 } from "@/state/api";
+import { TrendingUp } from "lucide-react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 type ExpenseSums = {
@@ -12,6 +13,8 @@ const colors = ["#fea238", "#20e864", "#3266ff"];
 
 const CardExpenseSummary = () => {
   const { data: dashboardMetrics, isLoading } = useGetDashboardMetricsQuery();
+
+  const expenseSummary = dashboardMetrics?.expenseSummary[0];
 
   const expenseCategoriesSummary =
     dashboardMetrics?.expenseByCategorySummary || [];
@@ -103,6 +106,27 @@ const CardExpenseSummary = () => {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* FOOTER */}
+          <div>
+            <hr />
+            {expenseSummary && (
+              <div className="mb-4 mt-3 flex items-center justify-between px-7">
+                <div className="pt-2">
+                  <p className="text-xs">
+                    Average:{""}
+                    <span className="font-semibold">
+                      ${expenseSummary.totalExpenses.toFixed(2)}
+                    </span>
+                  </p>
+                </div>
+                <span className="mt-2 flex items-center">
+                  <TrendingUp className="mr-2 text-green-500" />
+                  30%
+                </span>
+              </div>
+            )}
           </div>
         </>
       )}
