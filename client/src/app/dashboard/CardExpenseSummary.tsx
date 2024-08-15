@@ -8,7 +8,7 @@ type ExpenseSums = {
   [category: string]: number;
 };
 
-const colors = ["#fe92a8", "#20e864", "#3266ff"];
+const colors = ["#fea238", "#20e864", "#3266ff"];
 
 const CardExpenseSummary = () => {
   const { data: dashboardMetrics, isLoading } = useGetDashboardMetricsQuery();
@@ -87,6 +87,22 @@ const CardExpenseSummary = () => {
                 </span>
               </div>
             </div>
+
+            {/* LABEL */}
+            <ul className="flex flex-col items-center justify-around gap-3 py-5 xl:items-start">
+              {expenseCategories.map((entry, index) => (
+                <li
+                  key={`legend-${index}`}
+                  className="flex items-center text-xs"
+                >
+                  <span
+                    className="mr-2 h-3 w-3 rounded-full"
+                    style={{ backgroundColor: colors[index % colors.length] }}
+                  ></span>
+                  {entry.name}
+                </li>
+              ))}
+            </ul>
           </div>
         </>
       )}
