@@ -26,6 +26,7 @@ const CardPurchaseSummary = () => {
             <h2 className="mb-2 px-7 pt-5 text-lg font-semibold">
               Purchase Summary
             </h2>
+            <hr />
           </div>
 
           {/* BODY HEADER */}
