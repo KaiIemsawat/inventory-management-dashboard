@@ -7,6 +7,7 @@ import morgan from "morgan";
 
 /* ROUTE IMPORT */
 import dashboardRoutes from "./routes/dashboardRoutes";
+import productRoutes from "./routes/productRoute";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(cors());
 //     res.send("hello world 2");
 // });
 app.use("/dashboard", dashboardRoutes); // http://localhost:8000/dashboard
+app.use("/products", productRoutes); // http://localhost:8000/products
 
 /* SERVER */
 const port = process.env.PORT || 3001;
