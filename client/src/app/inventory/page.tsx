@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetProductsQuery } from "@/state/api";
+import Header from "@/app/(components)/Header";
 
 const Inventory = () => {
   const { data: products, isError, isLoading } = useGetProductsQuery();
@@ -16,6 +17,10 @@ const Inventory = () => {
       </div>
     );
   }
-  return <div className="flex flex-col"></div>;
+  return (
+    <div className="flex flex-col">
+      <Header name="Inventory" />
+    </div>
+  );
 };
 export default Inventory;
