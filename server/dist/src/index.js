@@ -13,6 +13,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
 const productRoute_1 = __importDefault(require("./routes/productRoute"));
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
+const expenseRoute_1 = __importDefault(require("./routes/expenseRoute"));
 /* CONFIGURATIONS */
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -31,6 +32,7 @@ app.use((0, cors_1.default)());
 app.use("/dashboard", dashboardRoutes_1.default); // http://localhost:8000/dashboard
 app.use("/products", productRoute_1.default); // http://localhost:8000/products
 app.use("/users", userRoute_1.default); // http://localhost:8000/users
+app.use("/expenses", expenseRoute_1.default); // http://localhost:8000/expenses
 /* SERVER */
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
