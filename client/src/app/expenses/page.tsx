@@ -8,7 +8,14 @@ import {
 } from "@/state/api";
 import Header from "@/app/(components)/Header";
 import { ClassNames } from "@emotion/react";
-import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import { start } from "repl";
 
 type AgggregateDataItem = {
@@ -57,7 +64,7 @@ const Expenses = () => {
         if (!acc[data.category]) {
           acc[data.category] = { name: data.category, amount: 0 };
           acc[data.category].color =
-            `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            `#${Math.floor(Math.random() * 16777215).toString(16)}`; // 16777215 <= number of colors that can be displayed on 24bit screen
           acc[data.category].amount += amount;
         }
         return acc;
@@ -161,7 +168,20 @@ const Expenses = () => {
                 fill="#8884d8"
                 dataKey="amount"
                 onMouseEnter={(_, index) => setActiveIndex(index)}
-              ></Pie>
+              >
+                {aggregateData.map(
+                  (entry: AgggregateDataItem, index: number) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={
+                        index === activeIndex ? "rgb(29, 78, 216" : entry.color
+                      }
+                    />
+                  ),
+                )}
+              </Pie>
+              <Tooltip />
+              <Legend />
             </PieChart>
           </ResponsiveContainer>
         </div>
