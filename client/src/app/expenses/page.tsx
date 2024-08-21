@@ -2,9 +2,24 @@
 
 import { useMemo, useState } from "react";
 
-import { useGetExpensesByCategoryQuery } from "@/state/api";
+import {
+  ExpenseByCategorySummary,
+  useGetExpensesByCategoryQuery,
+} from "@/state/api";
 import Header from "@/app/(components)/Header";
 import { ClassNames } from "@emotion/react";
+import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import { start } from "repl";
+
+type AgggregateDataItem = {
+  name: string;
+  color?: string;
+  amount: number;
+};
+
+type AggregatedData = {
+  [category: string]: AgggregateDataItem;
+};
 
 const Expenses = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -19,6 +34,37 @@ const Expenses = () => {
   } = useGetExpensesByCategoryQuery();
 
   const expenses = useMemo(() => expensesData ?? [], [expensesData]);
+
+  const parseDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  const aggregateData: AgggregateDataItem[] = useMemo(() => {
+    const filtered: AggregatedData = expenses
+      .filter((data: ExpenseByCategorySummary) => {
+        const matchesCategory =
+          selectedCategory === "All" || data.category === selectedCategory;
+        const dataDate = parseDate(data.date);
+        const matchDate =
+          !startDate ||
+          !endDate ||
+          (dataDate >= startDate && dataDate <= endDate);
+        return matchesCategory && matchDate;
+      })
+      .reduce((acc: AggregatedData, data: ExpenseByCategorySummary) => {
+        const amount = parseInt(data.amount);
+        if (!acc[data.category]) {
+          acc[data.category] = { name: data.category, amount: 0 };
+          acc[data.category].color =
+            `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+          acc[data.category].amount += amount;
+        }
+        return acc;
+      }, {});
+
+    return Object.values(filtered);
+  }, [expenses, selectedCategory, startDate, endDate]);
 
   const ClassNames = {
     label: "block text-sm font-medium text-gray-700",
@@ -100,6 +146,24 @@ const Expenses = () => {
               />
             </div>
           </div>
+        </div>
+
+        {/* PIE CHART */}
+        <div className="flex-grow rounded-lg bg-white p-4 shadow md:p-6">
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={aggregateData}
+                cx="50%"
+                cy="50%"
+                label
+                outerRadius={150}
+                fill="#8884d8"
+                dataKey="amount"
+                onMouseEnter={(_, index) => setActiveIndex(index)}
+              ></Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
